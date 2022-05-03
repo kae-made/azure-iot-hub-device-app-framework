@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.11.0" />
+    <PackageReference Include="Microsoft.Azure.Devices.Client" Version="1.40.0" />
+    <PackageReference Include="Microsoft.Azure.Devices.Provisioning.Client" Version="1.19.1" />
+    <PackageReference Include="Microsoft.Azure.Devices.Provisioning.Security.Tpm" Version="1.14.1" />
+    <PackageReference Include="Microsoft.Azure.Devices.Provisioning.Transport.Amqp" Version="1.16.1" />
+    <PackageReference Include="Microsoft.Azure.Devices.Provisioning.Transport.Http" Version="1.15.1" />
+    <PackageReference Include="Microsoft.Azure.Devices.Provisioning.Transport.Mqtt" Version="1.17.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="YamlDotNet" Version="11.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kae.Utility.Logging\Kae.Utility.Logging.csproj" />
+  </ItemGroup>
+
+</Project>

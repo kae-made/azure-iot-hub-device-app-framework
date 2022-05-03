@@ -1,0 +1,3 @@
+﻿iot-edge:
+    input-ports: [ "input0", "input1" ]
+    model-id: "dtmi:..."
