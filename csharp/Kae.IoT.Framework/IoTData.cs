@@ -14,10 +14,10 @@ namespace Kae.IoT.Framework
         public abstract IoTData Deserialize(string json);
     }
 
-    public abstract class D2CMessage: IoTData
+    public abstract class IoTDataWithProperties : IoTData
     {
         public IDictionary<string, string> Properties { get; set; }
-        public D2CMessage()
+        public IoTDataWithProperties()
         {
             Properties = new Dictionary<string, string>();
         }

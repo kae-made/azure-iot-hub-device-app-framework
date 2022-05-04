@@ -66,7 +66,7 @@ namespace SampleIoTFWDeviceApp
             return rp;
         }
 
-        public override D2CMessage GetAppD2CData()
+        public override IoTDataWithProperties GetAppD2CData()
         {
             return iotApp.GetD2CData();
         }

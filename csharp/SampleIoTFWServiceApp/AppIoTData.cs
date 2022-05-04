@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SampleIoTFWServiceApp
 {
-    class D2CData : Kae.IoT.Framework.D2CMessage
+    class D2CData : Kae.IoT.Framework.IoTDataWithProperties
     {
         public static readonly string Key_Temperature = "temperature";
         public static readonly string Key_Humidity = "humidity";

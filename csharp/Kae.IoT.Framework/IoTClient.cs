@@ -16,11 +16,11 @@ namespace Kae.IoT.Framework
         Task OpenAsync();
         Task CloseAsync();
 
-        Task UpdateD2CDataAsync(D2CMessage data);
+        Task UpdateD2CDataAsync(IoTDataWithProperties data);
         Task UpdateDeviceTwinsReportedPropertiesAsync(IoTData data);
         Task<IoTData> GetDeviceTwinsDesiredPropertiesAsync(IoTData dtProps);
 
-        Task SendD2CMessageAsync(D2CMessage data, string outputPort);
+        Task SendD2CMessageAsync(IoTDataWithProperties data, string outputPort);
         Task StartSendD2CMessageAsync(TimeSpan interval, string outputPort=null);
         void StopSendD2CMessage();
 

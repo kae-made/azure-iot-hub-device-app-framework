@@ -19,7 +19,7 @@ namespace Kae.IoT.Framework
             this.AppConfig = appConfig;
         }
 
-        public abstract D2CMessage GetAppD2CData();
+        public abstract IoTDataWithProperties GetAppD2CData();
         public abstract TwinCollection ResolveDeviceTwinsReportedProperties(IoTData rp);
 
         public abstract Task NotifyC2DMessageAsync(Message msg);

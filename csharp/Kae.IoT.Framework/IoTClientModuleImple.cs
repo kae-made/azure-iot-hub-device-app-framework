@@ -1,6 +1,8 @@
-﻿using Kae.IoT.Framework.Authentication;
+﻿using Azure.Storage.Blobs.Specialized;
+using Kae.IoT.Framework.Authentication;
 using Kae.Utility.Logging;
 using Microsoft.Azure.Devices.Client;
+using Microsoft.Azure.Devices.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +18,15 @@ namespace Kae.IoT.Framework
         private IEnumerable<string> inputPorts;
         private IEnumerable<string> InputPorts { get { return inputPorts; } }
 
+        public string BlobOnEdgeModuleNameKey { get; set; }
+        public string BlobOnEdgeAccountNameKey { get; set; }
+        public string BlobOnEdgeAccountKeyKey { get; set; }
+
+        string blobOnEdgeModuleName = "";
+        string blobOnEdgeAccountName = "";
+        string blobOnEdgeAccountKey = "";
+        
+
         public string DeviceId
         {
             get { return appConnector.AppConfig.DeviceId; }
@@ -28,7 +39,10 @@ namespace Kae.IoT.Framework
             moduleClient = auth.CreateModuleClient();
             connectionStatus = ConnectionStatus.Disconnected;
             moduleClient.SetConnectionStatusChangesHandler(ConnectionStatusChanged);
+
+            connector.AppConfig.DeviceId = Environment.GetEnvironmentVariable("IOTEDGE_DEVICEID");
         }
+
         public async Task OpenAsync()
         {
             try
@@ -49,7 +63,7 @@ namespace Kae.IoT.Framework
             }
         }
 
-        
+
         public async Task CloseAsync()
         {
             await moduleClient.CloseAsync();
@@ -64,6 +78,7 @@ namespace Kae.IoT.Framework
                 var dpJson = dp.Properties.Desired.ToJson();
                 dtProps.Deserialize(dpJson);
                 logger.LogInfo("got twins.");
+                await ResolveDesiredProperties(dp.Properties.Desired);
             }
             catch (Exception ex)
             {
@@ -72,7 +87,7 @@ namespace Kae.IoT.Framework
             return dtProps;
         }
 
-        public async Task SendD2CMessageAsync(D2CMessage data)
+        public async Task SendD2CMessageAsync(IoTDataWithProperties data)
         {
             logger.LogInfo("sending d2c message...");
             try
@@ -80,7 +95,7 @@ namespace Kae.IoT.Framework
                 var json = data.Serialize();
                 logger.LogInfo($"  content - {json}");
                 var msg = new Microsoft.Azure.Devices.Client.Message(System.Text.Encoding.UTF8.GetBytes(json));
-                foreach(var prop in data.Properties)
+                foreach (var prop in data.Properties)
                 {
                     msg.Properties.Add(prop.Key, prop.Value);
                 }
@@ -92,7 +107,7 @@ namespace Kae.IoT.Framework
             }
         }
 
-        public async Task SendD2CMessageAsync(D2CMessage data, string outputPort)
+        public async Task SendD2CMessageAsync(IoTDataWithProperties data, string outputPort)
         {
             logger.LogInfo("sending d2c message...");
             try
@@ -119,7 +134,7 @@ namespace Kae.IoT.Framework
             StopSendD2CMessagePeriodically();
         }
 
-        public async Task UpdateD2CDataAsync(D2CMessage data)
+        public async Task UpdateD2CDataAsync(IoTDataWithProperties data)
         {
             lock (d2cData)
             {
@@ -142,9 +157,44 @@ namespace Kae.IoT.Framework
             }
         }
 
-        public Task UploadLargeDataAsync(string blobName, Stream data)
+        protected override async Task ResolveDesiredProperties(TwinCollection dpTwin)
         {
-            throw new NotImplementedException();
+            ResolveDesiredProperties(dpTwin);
+        }
+
+        private void ResolveBlobOnEdgeConfig(TwinCollection dpTwin)
+        {
+            if ((!string.IsNullOrEmpty(BlobOnEdgeModuleNameKey)) && (!string.IsNullOrEmpty(BlobOnEdgeAccountNameKey)) && (!string.IsNullOrEmpty(BlobOnEdgeAccountKeyKey)))
+            {
+                if (dpTwin[BlobOnEdgeModuleNameKey] != null)
+                {
+                    blobOnEdgeModuleName = dpTwin[BlobOnEdgeModuleNameKey];
+                }
+                if (dpTwin[BlobOnEdgeAccountNameKey] != null)
+                {
+                    blobOnEdgeAccountName = dpTwin[BlobOnEdgeAccountNameKey];
+                }
+                if (dpTwin[BlobOnEdgeAccountKeyKey] != null)
+                {
+                    blobOnEdgeAccountKey = dpTwin[BlobOnEdgeAccountKeyKey];
+                }
+            }
+
+        }
+
+        public async Task UploadLargeDataAsync(string blobName, Stream data)
+        {
+            if ((!string.IsNullOrEmpty(blobOnEdgeModuleName)) && (!string.IsNullOrEmpty(blobOnEdgeAccountName)) && (!string.IsNullOrEmpty(blobOnEdgeAccountKey)))
+            {
+                var blobConnectionString = $"DefaultEndpointsProtocol=http;BlobEndpoint=http://{blobOnEdgeModuleName}:11002/;AccountName={blobOnEdgeAccountName};AccountKey={blobOnEdgeAccountKey};";
+                var blobClient = new BlockBlobClient(blobConnectionString, DeviceId, blobName);
+                await blobClient.UploadAsync(data, new Azure.Storage.Blobs.Models.BlobUploadOptions());
+                logger.LogInfo($"Uploaded {blobName} to {blobOnEdgeModuleName}");
+            }
+            else
+            {
+                logger.LogWarning("Invoked UploadLargeDataAsync but there is no configuration for Bob on Edge");
+            }
         }
     }
 }

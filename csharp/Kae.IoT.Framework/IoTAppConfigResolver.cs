@@ -51,6 +51,9 @@ namespace Kae.IoT.Framework
         public string DPSCertPath { get; set; }
         public string DPSCertPassword { get; set; }
         public IList<string> EdgeInputPorts { get; set; }
+        public string BlobOnEdgeModuleNameKey { get; set; }
+        public string BlobOnEdgeAccountNameKey { get; set; }
+        public string BlobOnEdgeAccountKeyKey { get; set; }
 
     }
     public class IoTAppConfigResolver
@@ -173,9 +176,22 @@ namespace Kae.IoT.Framework
                                 {
                                     iotAppConfig.EdgeInputPorts.Add(((YamlScalarNode)inputPortConfig).Value);
                                 }
-                            } else if (edgeConfigKey == "model-id")
+                            }
+                            else if (edgeConfigKey == "model-id")
                             {
                                 iotAppConfig.Options = new ClientOptions() { ModelId = ((YamlScalarNode)edgeConfigItem.Value).Value };
+                            }
+                            else if (edgeConfigKey == "blob-on-edge-module-name-key")
+                            {
+                                iotAppConfig.BlobOnEdgeModuleNameKey = ((YamlScalarNode)edgeConfigItem.Value).Value;
+                            }
+                            else if (edgeConfigKey == "blob-on-edge-account-name-key")
+                            {
+                                iotAppConfig.BlobOnEdgeAccountNameKey = ((YamlScalarNode)edgeConfigItem.Value).Value;
+                            }
+                            else if (edgeConfigKey == "blob-on-edge-account-key-key")
+                            {
+                                iotAppConfig.BlobOnEdgeAccountKeyKey = ((YamlScalarNode)edgeConfigItem.Value).Value;
                             }
                         }
                     }

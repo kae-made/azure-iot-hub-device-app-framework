@@ -16,7 +16,6 @@ namespace Kae.IoT.Framework
     internal abstract class IoTClientBase
     {
         protected IoTAppConnector appConnector;
-        protected IoTHubAuthentication authentication;
         protected Logger logger;
 
         protected ConnectionStatus connectionStatus;
@@ -32,7 +31,7 @@ namespace Kae.IoT.Framework
             get { return connectionStatusReason; }
         }
 
-        protected D2CMessage d2cData;
+        protected IoTDataWithProperties d2cData;
        
         protected TimeSpan d2cSendInterval;
         protected CancellationTokenSource d2cCancellationTokeSource;
@@ -73,7 +72,7 @@ namespace Kae.IoT.Framework
 
                 while (true)
                 {
-                    D2CMessage current = null;
+                    IoTDataWithProperties current = null;
                     lock (d2cData)
                     {
                         current = d2cData;
@@ -110,6 +109,7 @@ namespace Kae.IoT.Framework
 
         protected async Task DesiredPropertyUpdated(TwinCollection dp, object userContext)
         {
+            await ResolveDesiredProperties(dp);
             await appConnector.NotifyDeviceTwinsDesiredPropertiesAsync(dp);
         }
 
@@ -118,5 +118,7 @@ namespace Kae.IoT.Framework
             var response = await appConnector.InvokeDirectMethodAsync(methodRequest);
             return new MethodResponse(response.result, response.statusCode);
         }
+
+        protected abstract Task ResolveDesiredProperties(TwinCollection dpTwin);
     }
 }

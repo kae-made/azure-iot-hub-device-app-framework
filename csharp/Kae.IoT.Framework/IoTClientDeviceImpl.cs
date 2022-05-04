@@ -81,8 +81,12 @@ namespace Kae.IoT.Framework
             return dtProps;
         }
 
+        protected override async Task ResolveDesiredProperties(Microsoft.Azure.Devices.Shared.TwinCollection dpTwin)
+        {
+            // Do nothing
+        }
 
-        public async Task SendD2CMessageAsync(D2CMessage data, string outputPort)
+        public async Task SendD2CMessageAsync(IoTDataWithProperties data, string outputPort)
         {
             logger.LogInfo("sending d2c message...");
             try
@@ -113,7 +117,7 @@ namespace Kae.IoT.Framework
             StopSendD2CMessagePeriodically();
         }
 
-        public async Task UpdateD2CDataAsync(D2CMessage data)
+        public async Task UpdateD2CDataAsync(IoTDataWithProperties data)
         {
             lock (d2cData)
             {
