@@ -20,12 +20,11 @@ namespace Kae.IoT.Framework
         Task UpdateDeviceTwinsReportedPropertiesAsync(IoTData data);
         Task<IoTData> GetDeviceTwinsDesiredPropertiesAsync(IoTData dtProps);
 
-        Task SendD2CMessageAsync(IoTDataWithProperties data, string outputPort);
-        Task StartSendD2CMessageAsync(TimeSpan interval, string outputPort=null);
+        Task SendD2CMessageAsync(IoTDataWithProperties data, string outputPort = null);
+        Task StartSendD2CMessageAsync(TimeSpan interval, string outputPort = null);
         void StopSendD2CMessage();
 
 
         Task UploadLargeDataAsync(string blobName, Stream data);
     }
-
 }
