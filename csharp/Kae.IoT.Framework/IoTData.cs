@@ -16,7 +16,9 @@ namespace Kae.IoT.Framework
 
     public abstract class IoTDataWithProperties : IoTData
     {
+        [Newtonsoft.Json.JsonIgnore]
         public IDictionary<string, string> Properties { get; set; }
+
         public IoTDataWithProperties()
         {
             Properties = new Dictionary<string, string>();
