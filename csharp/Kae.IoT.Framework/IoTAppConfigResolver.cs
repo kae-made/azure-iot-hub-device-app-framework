@@ -73,125 +73,134 @@ namespace Kae.IoT.Framework
                     string itemKey = ((YamlScalarNode)configItem.Key).Value;
                     if (itemKey == "iot-hub")
                     {
-                        foreach (var iotHubConfigItem in ((YamlMappingNode)configItem.Value).Children)
+                        if (configItem.Value.NodeType == YamlNodeType.Mapping)
                         {
-                            string iotHubConfigKey = ((YamlScalarNode)iotHubConfigItem.Key).Value;
-                            string iotHubConfigValue = ((YamlScalarNode)iotHubConfigItem.Value).Value;
-                            if (iotHubConfigKey == "connection-string")
+                            foreach (var iotHubConfigItem in ((YamlMappingNode)configItem.Value).Children)
                             {
-                                iotAppConfig.ConnectionString = iotHubConfigValue;
-                                iotAppConfig.IsSASAuth = true;
-                            }
-                            else if (iotHubConfigKey == "transport-type")
-                            {
-                                var ttStr = iotHubConfigValue;
-                                iotAppConfig.IoTHubTransportType = ResolveTransportType(ttStr);
-                            }
-                            else if (iotHubConfigKey == "model-id")
-                            {
-                                var miStr = iotHubConfigValue;
-                                if (!string.IsNullOrEmpty(miStr))
+                                string iotHubConfigKey = ((YamlScalarNode)iotHubConfigItem.Key).Value;
+                                string iotHubConfigValue = ((YamlScalarNode)iotHubConfigItem.Value).Value;
+                                if (iotHubConfigKey == "connection-string")
                                 {
-                                    iotAppConfig.Options = new ClientOptions() { ModelId = miStr };
+                                    iotAppConfig.ConnectionString = iotHubConfigValue;
+                                    iotAppConfig.IsSASAuth = true;
                                 }
-                            }
-                            else if (iotHubConfigKey == "root-cert-path")
-                            {
-                                iotAppConfig.RootCertPath = iotHubConfigValue;
-                                iotAppConfig.IsX509Auth = true;
-                            }
-                            else if (iotHubConfigKey == "intermediate1-path")
-                            {
-                                iotAppConfig.Intermediate1CertPath = iotHubConfigValue;
-                            }
-                            else if (iotHubConfigKey == "intermediate2-path")
-                            {
-                                iotAppConfig.Intermediate2CertPath = iotHubConfigValue;
-                            }
-                            else if (iotHubConfigKey == "device-pfx-path")
-                            {
-                                iotAppConfig.DevicePfxPath = iotHubConfigValue;
-                            }
-                            else if (iotHubConfigKey == "device-pfx-password")
-                            {
-                                iotAppConfig.DevicePfxPassword = iotHubConfigValue;
-                            }
-                            else if (iotHubConfigKey == "hostname")
-                            {
-                                iotAppConfig.IotHubUrl = iotHubConfigValue;
-                            }
-                            else if (iotHubConfigKey == "device-id")
-                            {
-                                iotAppConfig.DeviceId = iotHubConfigValue;
+                                else if (iotHubConfigKey == "transport-type")
+                                {
+                                    var ttStr = iotHubConfigValue;
+                                    iotAppConfig.IoTHubTransportType = ResolveTransportType(ttStr);
+                                }
+                                else if (iotHubConfigKey == "model-id")
+                                {
+                                    var miStr = iotHubConfigValue;
+                                    if (!string.IsNullOrEmpty(miStr))
+                                    {
+                                        iotAppConfig.Options = new ClientOptions() { ModelId = miStr };
+                                    }
+                                }
+                                else if (iotHubConfigKey == "root-cert-path")
+                                {
+                                    iotAppConfig.RootCertPath = iotHubConfigValue;
+                                    iotAppConfig.IsX509Auth = true;
+                                }
+                                else if (iotHubConfigKey == "intermediate1-path")
+                                {
+                                    iotAppConfig.Intermediate1CertPath = iotHubConfigValue;
+                                }
+                                else if (iotHubConfigKey == "intermediate2-path")
+                                {
+                                    iotAppConfig.Intermediate2CertPath = iotHubConfigValue;
+                                }
+                                else if (iotHubConfigKey == "device-pfx-path")
+                                {
+                                    iotAppConfig.DevicePfxPath = iotHubConfigValue;
+                                }
+                                else if (iotHubConfigKey == "device-pfx-password")
+                                {
+                                    iotAppConfig.DevicePfxPassword = iotHubConfigValue;
+                                }
+                                else if (iotHubConfigKey == "hostname")
+                                {
+                                    iotAppConfig.IotHubUrl = iotHubConfigValue;
+                                }
+                                else if (iotHubConfigKey == "device-id")
+                                {
+                                    iotAppConfig.DeviceId = iotHubConfigValue;
+                                }
                             }
                         }
                     }
                     else if (itemKey == "dps")
                     {
-                        foreach (var dpsConfigItem in ((YamlMappingNode)configItem.Value).Children)
+                        if (configItem.Value.NodeType == YamlNodeType.Mapping)
                         {
-                            string dpsConfigKey = ((YamlScalarNode)dpsConfigItem.Key).Value;
-                            string dpsConfigValue = ((YamlScalarNode)dpsConfigItem.Value).Value;
-                            if (dpsConfigKey == "global-endpoint")
+                            foreach (var dpsConfigItem in ((YamlMappingNode)configItem.Value).Children)
                             {
-                                iotAppConfig.DPSGlobalEndpoint = dpsConfigValue;
-                                iotAppConfig.IsDPS = true;
-                            }
-                            else if (dpsConfigKey == "id-scope")
-                            {
-                                iotAppConfig.DPSIdScope = dpsConfigValue;
-                            }
-                            else if (dpsConfigKey == "registration-id")
-                            {
-                                iotAppConfig.DPSRegistrationId = dpsConfigValue;
-                            }
-                            else if (dpsConfigKey == "sas-key")
-                            {
-                                iotAppConfig.DPSSASKey = dpsConfigValue;
-                            }
-                            else if (dpsConfigKey == "cert-path")
-                            {
-                                iotAppConfig.DPSCertPath = dpsConfigValue;
-                            }
-                            else if (dpsConfigKey == "cert-password")
-                            {
-                                iotAppConfig.DPSCertPassword = dpsConfigValue;
-                            }
-                            else if (dpsConfigKey == "transport-type")
-                            {
-                                iotAppConfig.DPSTransportType = ResolveTransportType(dpsConfigValue);
+                                string dpsConfigKey = ((YamlScalarNode)dpsConfigItem.Key).Value;
+                                string dpsConfigValue = ((YamlScalarNode)dpsConfigItem.Value).Value;
+                                if (dpsConfigKey == "global-endpoint")
+                                {
+                                    iotAppConfig.DPSGlobalEndpoint = dpsConfigValue;
+                                    iotAppConfig.IsDPS = true;
+                                }
+                                else if (dpsConfigKey == "id-scope")
+                                {
+                                    iotAppConfig.DPSIdScope = dpsConfigValue;
+                                }
+                                else if (dpsConfigKey == "registration-id")
+                                {
+                                    iotAppConfig.DPSRegistrationId = dpsConfigValue;
+                                }
+                                else if (dpsConfigKey == "sas-key")
+                                {
+                                    iotAppConfig.DPSSASKey = dpsConfigValue;
+                                }
+                                else if (dpsConfigKey == "cert-path")
+                                {
+                                    iotAppConfig.DPSCertPath = dpsConfigValue;
+                                }
+                                else if (dpsConfigKey == "cert-password")
+                                {
+                                    iotAppConfig.DPSCertPassword = dpsConfigValue;
+                                }
+                                else if (dpsConfigKey == "transport-type")
+                                {
+                                    iotAppConfig.DPSTransportType = ResolveTransportType(dpsConfigValue);
+                                }
                             }
                         }
                     }
                     else if (itemKey == "iot-edge")
                     {
-                        iotAppConfig.IsEdgeAuth = true;
-                        foreach (var edgeConfigItem in ((YamlMappingNode)configItem.Value).Children)
+                        if (configItem.Value.NodeType == YamlNodeType.Mapping)
                         {
-                            string edgeConfigKey = ((YamlScalarNode)edgeConfigItem.Key).Value;
-                            if (edgeConfigKey == "input-ports")
+                            iotAppConfig.IsEdgeAuth = true;
+                            foreach (var edgeConfigItem in ((YamlMappingNode)configItem.Value).Children)
                             {
-                                var inputPortsConfig = (YamlSequenceNode)edgeConfigItem.Value;
-                                foreach (var inputPortConfig in inputPortsConfig)
+                                string edgeConfigKey = ((YamlScalarNode)edgeConfigItem.Key).Value;
+                                if (edgeConfigKey == "input-ports")
                                 {
-                                    iotAppConfig.EdgeInputPorts.Add(((YamlScalarNode)inputPortConfig).Value);
+                                    var inputPortsConfig = (YamlSequenceNode)edgeConfigItem.Value;
+                                    foreach (var inputPortConfig in inputPortsConfig)
+                                    {
+                                        iotAppConfig.EdgeInputPorts.Add(((YamlScalarNode)inputPortConfig).Value);
+                                    }
                                 }
-                            }
-                            else if (edgeConfigKey == "model-id")
-                            {
-                                iotAppConfig.Options = new ClientOptions() { ModelId = ((YamlScalarNode)edgeConfigItem.Value).Value };
-                            }
-                            else if (edgeConfigKey == "blob-on-edge-module-name-key")
-                            {
-                                iotAppConfig.BlobOnEdgeModuleNameKey = ((YamlScalarNode)edgeConfigItem.Value).Value;
-                            }
-                            else if (edgeConfigKey == "blob-on-edge-account-name-key")
-                            {
-                                iotAppConfig.BlobOnEdgeAccountNameKey = ((YamlScalarNode)edgeConfigItem.Value).Value;
-                            }
-                            else if (edgeConfigKey == "blob-on-edge-account-key-key")
-                            {
-                                iotAppConfig.BlobOnEdgeAccountKeyKey = ((YamlScalarNode)edgeConfigItem.Value).Value;
+                                else if (edgeConfigKey == "model-id")
+                                {
+                                    iotAppConfig.Options = new ClientOptions() { ModelId = ((YamlScalarNode)edgeConfigItem.Value).Value };
+                                }
+                                else if (edgeConfigKey == "blob-on-edge-module-name-key")
+                                {
+                                    iotAppConfig.BlobOnEdgeModuleNameKey = ((YamlScalarNode)edgeConfigItem.Value).Value;
+                                }
+                                else if (edgeConfigKey == "blob-on-edge-account-name-key")
+                                {
+                                    iotAppConfig.BlobOnEdgeAccountNameKey = ((YamlScalarNode)edgeConfigItem.Value).Value;
+                                }
+                                else if (edgeConfigKey == "blob-on-edge-account-key-key")
+                                {
+                                    iotAppConfig.BlobOnEdgeAccountKeyKey = ((YamlScalarNode)edgeConfigItem.Value).Value;
+                                }
                             }
                         }
                     }
