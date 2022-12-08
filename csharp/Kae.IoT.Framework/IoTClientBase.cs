@@ -62,9 +62,9 @@ namespace Kae.IoT.Framework
             }
         }
 
-        protected async Task StartSendD2CMessagePeriodicallyAsync(string outputPort = null)
+        protected async Task StartSendD2CMessagePeriodicallyAsync(CancellationTokenSource cancelTokenSource, string outputPort = null)
         {
-            d2cCancellationTokeSource = new CancellationTokenSource();
+            d2cCancellationTokeSource =cancelTokenSource;
             var task = Task.Run(async () =>
             {
                 d2cCancellationTokeSource.Token.ThrowIfCancellationRequested();

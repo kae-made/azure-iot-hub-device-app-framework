@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kae.IoT.Framework
@@ -21,7 +22,7 @@ namespace Kae.IoT.Framework
         Task<IoTData> GetDeviceTwinsDesiredPropertiesAsync(IoTData dtProps);
 
         Task SendD2CMessageAsync(IoTDataWithProperties data, string outputPort = null);
-        Task StartSendD2CMessageAsync(TimeSpan interval, string outputPort = null);
+        Task StartSendD2CMessageAsync(TimeSpan interval, CancellationTokenSource cancelTokenSource, string outputPort = null);
         void StopSendD2CMessage();
 
 

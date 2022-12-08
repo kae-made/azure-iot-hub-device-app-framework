@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kae.IoT.Framework
@@ -78,7 +79,6 @@ namespace Kae.IoT.Framework
                 var dpJson = dp.Properties.Desired.ToJson();
                 dtProps.Deserialize(dpJson);
                 logger.LogInfo("got twins.");
-                await ResolveDesiredProperties(dp.Properties.Desired);
             }
             catch (Exception ex)
             {
@@ -123,10 +123,10 @@ namespace Kae.IoT.Framework
             }
         }
 
-        public async Task StartSendD2CMessageAsync(TimeSpan interval, string outputPort)
+        public async Task StartSendD2CMessageAsync(TimeSpan interval, CancellationTokenSource cancelTokenSource, string outputPort)
         {
             d2cSendInterval = interval;
-            await StartSendD2CMessagePeriodicallyAsync(outputPort);
+            await StartSendD2CMessagePeriodicallyAsync(cancelTokenSource, outputPort);
         }
 
         public void StopSendD2CMessage()
@@ -159,7 +159,7 @@ namespace Kae.IoT.Framework
 
         protected override async Task ResolveDesiredProperties(TwinCollection dpTwin)
         {
-            ResolveDesiredProperties(dpTwin);
+            // Do nothing
         }
 
         private void ResolveBlobOnEdgeConfig(TwinCollection dpTwin)

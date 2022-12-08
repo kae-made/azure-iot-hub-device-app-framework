@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kae.IoT.Framework
@@ -106,10 +107,10 @@ namespace Kae.IoT.Framework
             }
         }
 
-        public async Task StartSendD2CMessageAsync(TimeSpan interval, string outputPort)
+        public async Task StartSendD2CMessageAsync(TimeSpan interval, CancellationTokenSource cancelTokenSource, string outputPort)
         {
             d2cSendInterval = interval;
-            await StartSendD2CMessagePeriodicallyAsync();
+            await StartSendD2CMessagePeriodicallyAsync(cancelTokenSource);
         }
 
         public void StopSendD2CMessage()

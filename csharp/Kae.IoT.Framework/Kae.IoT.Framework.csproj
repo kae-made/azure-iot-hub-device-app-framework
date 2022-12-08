@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Hiroshi Ota</Authors>
     <Company>Knowledge &amp; Experience</Company>
     <PackageProjectUrl>https://github.com/kae-made/azure-iot-hub-device-app-framework/tree/main/csharp/Kae.IoT.Framework</PackageProjectUrl>
@@ -9,11 +9,17 @@
     <RepositoryUrl>https://github.com/kae-made/azure-iot-hub-device-app-framework</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>1.0.1</Version>
+    <Version>1.2.0</Version>
+    <Copyright>Copyright (c) Knowledge &amp; Experience. All rights reserved.</Copyright>
+    <PackageIcon>kae-log-no-chart-128.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\..\..\Documents\GitHub\azure-iot-hub-device-app-framework\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\..\..\OneDrive\画像\kae-log-no-chart-128.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
